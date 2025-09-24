@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For U 💖</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Amiri:wght@400;700&family=Dancing+Script:wght@400;700&family=Reem+Kufi+Fun&display=swap" rel="stylesheet">
+    <style>
+        /* ===== عام ===== */
+        :root {
+            --pink: #ff69b4;
+            --soft-pink: #ffb6c1;
+            --light-pink: #ffd6e0;
+            --purple-pink: #ee82ee;
+            --romantic-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #f6d1ff 100%);
+        }
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+            font-family: "Amiri", serif;
+            direction: rtl;
+            transition: background 2s ease-in-out;
+        }
+        canvas { display: block; position: absolute; z-index: -1; }
+        body.romantic-bg {
+            background: var(--romantic-gradient);
+            animation: fadeToRomantic 2s forwards;
+        }
+        body.writing-bg {
+            background: var(--romantic-gradient);
+            transition: background-color 1s ease;
+        }
+        @keyframes fadeToRomantic {
+            from { background: black; }
+            to { background: var(--romantic-gradient); }
+        }
+
+        /* ===== العد التنازلي ===== */
+        #countdown {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 120px;
+            color: var(--pink);
+            text-shadow: 0 0 10px var(--pink), 0 0 20px var(--pink), 0 0 40px var(--pink), 0 0 80px var(--pink);
+            animation: glow 1.5s ease-in-out infinite;
+            z-index: 10;
+            font-family: "Courier New", monospace;
+        }
+        @keyframes glow {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--pink), 0 0 20px var(--pink); }
+            50% { opacity: 0.6; text-shadow: 0 0 20px var(--pink), 0 0 40px var(--pink); }
+        }
+
+        /* ===== الرسالة الأولية ===== */
+        #initial-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            color: var(--pink);
+            text-shadow: 0 0 15px var(--pink), 0 0 30px var(--pink), 0 0 50px var(--pink);
+            display: none;
+            animation: fadeIn 2s ease forwards;
+            text-align: center;
+            z-index: 10;
+            font-family: "Amiri", serif;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* ===== قلوب طائرة ===== */
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: floatUp 4s linear forwards;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 1;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+        
+        /* ===== البطاقة ===== */
+        .love-letter-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 220px;
+            max-width: 80%;
+            max-height: 60%;
+            display: none;
+            z-index: 10;
+            transition: opacity 0.5s ease-out;
+        }
+        .envelope-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 1500px;
+        }
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--pink), var(--soft-pink));
+            border-radius: 12px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        .envelope:hover {
+            transform: scale(1.03);
+        }
+        .envelope-top, .envelope-front {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+        .envelope-top {
+            background: linear-gradient(180deg, var(--light-pink) 0%, var(--soft-pink) 100%);
+            border-radius: 12px 12px 0 0;
+            transform-origin: top;
+            transform: rotateX(0deg);
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 3;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15) inset;
+        }
+        .envelope-front {
+            background: linear-gradient(180deg, var(--soft-pink), var(--pink));
+            border-radius: 0 0 12px 12px;
+            z-index: 1;
+        }
+        .card {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s;
+            transform: translateY(0);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .love-letter-container.opened .envelope-top {
+            transform: rotateX(-180deg);
+        }
+        .love-letter-container.opened .card {
+            transform: translateY(-80px); 
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+            transition-delay: 0.15s;
+        }
+
+        /* ===== صفحة الكتابة اليدوية ===== */
+        .writing-page {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.1);
+            width: 80%;
+            max-width: 600px;
+            height: auto;
+            min-height: 200px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 40px;
+            box-sizing: border-box;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 1s ease-out;
+            overflow-y: auto;
+        }
+        .writing-page.visible {
+            opacity: 1;
+        }
+        .writing-page p {
+            font-family: 'Reem Kufi Fun', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            text-align: right;
+            border-right: 2px solid var(--pink);
+            padding-right: 15px;
+            margin-top: 0;
+            font-size: 16px;
+        }
+        .writing-text {
+            display: inline;
+        }
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 25px;
+            background-color: var(--pink);
+            vertical-align: middle;
+            margin-right: 5px;
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* ===== الصورة المضافة ===== */
+        .added-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        .added-image.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== توقيع المطور ===== */
+        .developer-signature {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+            z-index: 1;
+            direction: ltr;
+        }
+        /* ===== استجابة الشاشة الصغيرة ===== */
+        @media (max-width: 600px) {
+            #countdown { font-size: 80px; }
+            #initial-message { font-size: 40px; }
+            .love-letter-container { width: 90%; height: 50%; }
+            .writing-page { width: 95%; height: 90%; padding: 20px; }
+            .writing-page p { font-size: 20px; }
+            .added-image { max-width: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div id="countdown">3</div>
+    <div id="initial-message">for u</div>
+
+    <div class="love-letter-container" id="love-letter">
+        <div class="envelope-wrapper">
+            <div class="envelope" role="button" aria-label="اضغط لفتح الرسالة">
+                <div class="envelope-top"></div>
+                <div class="envelope-front"></div>
+                <div class="card">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="writing-page" id="writing-page">
+        <p>
+            <span id="writing-area"></span><span class="cursor"></span>
+        </p>
+        <img id="final-image" class="added-image" src="" alt="صورة مفاجأة">
+    </div>
+
+    <div class="developer-signature">Coded by Abdou</div>
+
+    <audio id="loveAudio" src="https://f.top4top.io/m_3553m5i0t1.mp3" preload="auto" loop></audio>
+    <audio id="writingAudio" src="https://assets.mixkit.co/sfx/preview/mixkit-typewriter-key-press-1282.mp3" preload="auto"></audio>
+    <audio id="openEnvelopeAudio" src="https://assets.mixkit.co/sfx/preview/mixkit-paper-flip-1549.mp3" preload="auto"></audio>
+
+    <script>
+        const recipientName = "رشا";
+        // تم تعديل الرسالة الأولية هنا لتكون "for u" فقط
+        document.getElementById("initial-message").innerHTML = `for u`;
+        const imageURL = "https://i.imgur.com/8OJLNae.gif"; // رابط الصورة هنا
+
+        const longLoveMessage = `
+            إلى غاليتي رشا،
+            يا زهرة الحياة،
+            في كل نبضة من قلبي، أجد اسمكِ يتردد،
+            وفي كل نظرة أرى جمال الكون يتجسد في عينيكِ.
+            أنتِ لستِ مجرد حلم، بل أنتِ الواقع الأجمل الذي أعيشه.
+            أحبكِ بكل ما في الكلمة من معنى،
+            وكل يوم يمر يزداد يقيني بأنكِ نصيبي من هذه الدنيا.
+            💖
+            من: Abdou
+        `;
+        const messageLines = longLoveMessage.trim().split('\n');
+        
+        /* ==== الماتريكس ==== */
+        const canvas = document.getElementById("matrix");
+        const ctx = canvas.getContext("2d");
+        const fontSize = 14;
+        let columns = 0;
+        let drops = [];
+        let hue = 320;
+        let matrixAnimationId;
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = Math.floor(canvas.width / fontSize);
+            drops = Array(columns).fill(1);
+        }
+        initCanvas();
+        window.addEventListener('resize', initCanvas);
+        const letters = "💖❤️💜0123456789".split("");
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            hue = (hue + 0.5) % 360;
+            ctx.fillStyle = `hsl(${hue}, 100%, 70%)`;
+            ctx.font = fontSize + "px monospace";
+            drops.forEach((y, i) => {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            });
+            matrixAnimationId = requestAnimationFrame(drawMatrix);
+        }
+        drawMatrix();
+
+        /* ==== العد التنازلي ==== */
+        let count = 3;
+        const countdownEl = document.getElementById("countdown");
+        const initialMessageEl = document.getElementById("initial-message");
+        const loveLetter = document.getElementById("love-letter");
+        const envelope = document.querySelector(".envelope");
+        const loveAudio = document.getElementById("loveAudio");
+        const writingPage = document.getElementById("writing-page");
+        const openEnvelopeAudio = document.getElementById("openEnvelopeAudio");
+        const writingTextElement = document.getElementById("writing-area");
+
+        const countdownInterval = setInterval(() => {
+            if (count === 3) {
+                loveAudio.play();
+            }
+            count--;
+            if (count > 0) {
+                countdownEl.textContent = count;
+            } else {
+                clearInterval(countdownInterval);
+                countdownEl.style.display = "none";
+                initialMessageEl.style.display = "block";
+                startHearts();
+                setTimeout(() => {
+                    initialMessageEl.style.display = "none";
+                    loveLetter.style.display = "block";
+                    document.body.classList.remove("writing-bg");
+                    document.body.classList.add("romantic-bg");
+                    cancelAnimationFrame(matrixAnimationId);
+                    canvas.style.display = 'none';
+
+                    envelope.addEventListener("click", () => {
+                        openEnvelopeAudio.play();
+                        loveLetter.style.opacity = "0";
+                        setTimeout(() => {
+                            loveLetter.style.display = "none";
+                            writingPage.style.display = "flex";
+                            writingPage.classList.add("visible");
+                            startWritingEffect();
+                        }, 500);
+                    }, { once: true });
+                }, 3000);
+            }
+        }, 1500);
+
+        /* ==== قلوب طائرة (خلفية) ==== */
+        const heartColors = ["❤️", "💖", "💜"];
+        function createHeart() {
+            const h = document.createElement("div");
+            h.className = "heart";
+            h.innerHTML = heartColors[Math.floor(Math.random() * heartColors.length)];
+            h.style.left = Math.random() * (window.innerWidth - 50) + "px";
+            h.style.bottom = "0px";
+            h.style.fontSize = (14 + Math.random() * 28) + "px";
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 4200);
+        }
+        let heartInterval;
+        function startHearts() {
+            heartInterval = setInterval(createHeart, 500);
+        }
+
+        /* ==== تأثير الكتابة اليدوية مع التكبير المستمر للصفحة والخط ==== */
+        const writingArea = document.getElementById("writing-area");
+        const writingAudio = document.getElementById("writingAudio");
+        const writingPageP = document.querySelector(".writing-page p");
+        const finalImage = document.getElementById("final-image");
+        let lineIndex = 0;
+        let charIndex = 0;
+        const targetScale = 1.0;
+        const initialScale = 0.1;
+        const initialFontSize = 16;
+        const targetFontSize = 28;
+        const duration = 12000;
+        let startTime;
+        let typingInterval;
+
+        function startWritingEffect() {
+            startTime = Date.now();
+            typingInterval = setInterval(() => {
+                if (lineIndex < messageLines.length) {
+                    const currentLine = messageLines[lineIndex].trim();
+                    if (charIndex < currentLine.length) {
+                        writingArea.textContent += currentLine.charAt(charIndex);
+                        writingAudio.play();
+                        charIndex++;
+                    } else {
+                        writingArea.innerHTML += '<br>';
+                        lineIndex++;
+                        charIndex = 0;
+                    }
+                } else {
+                    clearInterval(typingInterval);
+                    finalImage.src = imageURL;
+                    finalImage.classList.add('visible');
+                }
+            }, 50);
+
+            function animateScaleAndFont() {
+                const elapsed = Date.now() - startTime;
+                if (elapsed < duration) {
+                    const progress = elapsed / duration;
+                    const newScale = initialScale + (targetScale - initialScale) * progress;
+                    const newFontSize = initialFontSize + (targetFontSize - initialFontSize) * progress;
+
+                    writingPage.style.transform = `translate(-50%, -50%) scale(${newScale})`;
+                    writingPageP.style.fontSize = `${newFontSize}px`;
+                    
+                    requestAnimationFrame(animateScaleAndFont);
+                }
+            }
+            animateScaleAndFont();
+        }
+    </script>
+</body>
+</html>
